@@ -62,11 +62,15 @@ function spotifySong() {
     }
     songArray = songArray.join('');
   }
-  spotify.search({ type: 'track', query: songArray }, function(err, data) {
-    if(err) {
-      return console.log(err);
+  spotify.search({ type: 'track', query: songArray }, function(error, data) {
+    if(error) {
+      return console.log(error);
     } else {
-      console.log('The song is ' + songArray.toUpperCase() + ' by ' + data.tracks.items[0].artists[0].name + '. From the album, ' + data.tracks.items[0].album.name + ' Link: ' + data.tracks.items[0].artists[0].external_urls.spotify);
+      var songArray = data.tracks.items[0];
+      console.log("Artist: " + songArray.artists[0].name);
+      console.log("Song: " + songArray.name);
+      console.log("Preview URL: " + songArray.preview_url);
+      console.log("Album: " + songArray.album.name);
     }
   });
 
@@ -77,7 +81,7 @@ function filmOmdb() {
     popCulture = popCulture.trim().replace('', '+');
     movie = popCulture;
   } else if(!process.argv[3]) {
-    movie = 'Mr+Nobody';
+    movie = 'Reefer Madness';
   } else {
     popCulture = process.argv;
     for(var i = 3; i < popCulture.length; i++) {
