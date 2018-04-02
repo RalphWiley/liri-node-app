@@ -69,7 +69,7 @@ function spotifySong() {
       var songArray = data.tracks.items[0];
       console.log("Artist: " + songArray.artists[0].name);
       console.log("Song: " + songArray.name);
-      console.log("Preview URL: " + songArray.preview_url);
+      console.log("Preview URL: " + songArray.artists[0].external_urls.spotify);
       console.log("Album: " + songArray.album.name);
     }
   });
