@@ -50,17 +50,10 @@ function showTweets() {
 }
 
 function spotifySong() {
-  spotify.search({ type: 'track', query: songArray}, function(error, data) {
-    if(!error) {
-      console.log('The song is ' + songArray.toUpperCase() + 'by' + data.tracks.items[0].artists[0].name + '. From the album, ' + data.tracks.items[0].album.name + 'Link: ' + data.tracks.items[0].artists[0].external_urls.spotify);
-    } else {
-      console.log('Error');
-    }
-  });
   if(popCulture !== '') {
     songArray = popCulture;
   } else if (!process.argv[3]) {
-    songArray = 'When I Was Done Dying';
+    songArray = 'Thriller';
   } else {
     popCulture = process.argv;
     songArray = [];
@@ -69,6 +62,14 @@ function spotifySong() {
     }
     songArray = songArray.join('');
   }
+  spotify.search({ type: 'track', query: songArray}, function(err, data) {
+    if(err) {
+      console.log('Error');
+    } else {
+      console.log('The song is ' + songArray.toUpperCase() + ' by ' + data.tracks.items[0].artists[0].name + '. From the album, ' + data.tracks.items[0].album.name + 'Link: ' + data.tracks.items[0].artists[0].external_urls.spotify);
+    }
+  });
+
 }
 
 function filmOmdb() {
@@ -78,7 +79,7 @@ function filmOmdb() {
     popCulture = popCulture.trim().replace('', '+');
     movie = popCulture;
   } else if(!process.argv[3]) {
-    movie = 'Reefer+Madness';
+    movie = 'Mr+Nobody';
   } else {
     popCulture = process.argv;
     for(var i = 3; i < popCulture.length; i++) {
@@ -91,35 +92,35 @@ function filmOmdb() {
   }
   request(omdbURL, function(error, response, body) {
     if(!error && response.statusCode == 200) {
-      var body = JSON.parse(body);
 
-      console.log("Title: " + body.Title);
-      console.log("Release Year: " + body.Year);
-      console.log("IMdB Rating: " + body.imdbRating);
-      console.log("Country: " + body.Country);
-      console.log("Language: " + body.Language);
-      console.log("Plot: " + body.Plot);
-      console.log("Actors: " + body.Actors);
-      console.log("Rotten Tomatoes Rating: " + body.tomatoRating);
-      console.log("Rotten Tomatoes URL: " + body.tomatoURL);
+
+      console.log("Title: " + JSON.parse(body).Title);
+      console.log("Release Year: " + JSON.parse(body).Year);
+      console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
+      console.log("Country: " + JSON.parse(body).Country);
+      console.log("Language: " + JSON.parse(body).Language);
+      console.log("Plot: " + JSON.parse(body).Plot);
+      console.log("Actors: " + JSON.parse(body).Actors);
+      console.log("Rotten Tomatoes Rating: " + JSON.parse(body).tomatoRating);
+
 
     } else {
-      console.log('Error');
-  }
-    if(movie === "Reefer Madness") {
-      console.log("---------------");
-      console.log("If you haven't watched 'Reefer Madness' then you should: http://www.imdb.com/title/tt0028346/?ref_=nv_sr_2");
-      console.log("It's on YouTube!");
+      console.log(error);
+      console.log(response.statusCode);
     }
   });
 }
 
 function doWhatItSays() {
   fs.readFile('random.txt', 'utf8', function(error, data) {
-    var txt = data.split(',');
-    command = txt[0];
-    popCulture = txt[1];
-    popCulture = popCulture.replace("", '');
-    liri();
+    if(error) {
+      console.log(error);
+    } else {
+      var txt = data.split(',');
+      command = txt[0];
+      popCulture = txt[1];
+      popCulture = popCulture.replace("", '');
+      liri();
+    }
   });
 }
