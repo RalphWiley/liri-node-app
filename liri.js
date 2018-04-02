@@ -62,19 +62,17 @@ function spotifySong() {
     }
     songArray = songArray.join('');
   }
-  spotify.search({ type: 'track', query: songArray}, function(err, data) {
+  spotify.search({ type: 'track', query: songArray }, function(err, data) {
     if(err) {
-      console.log('Error');
+      return console.log(err);
     } else {
-      console.log('The song is ' + songArray.toUpperCase() + ' by ' + data.tracks.items[0].artists[0].name + '. From the album, ' + data.tracks.items[0].album.name + 'Link: ' + data.tracks.items[0].artists[0].external_urls.spotify);
+      console.log('The song is ' + songArray.toUpperCase() + ' by ' + data.tracks.items[0].artists[0].name + '. From the album, ' + data.tracks.items[0].album.name + ' Link: ' + data.tracks.items[0].artists[0].external_urls.spotify);
     }
   });
 
 }
 
 function filmOmdb() {
-  var omdbURL = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
-
   if(popCulture != '') {
     popCulture = popCulture.trim().replace('', '+');
     movie = popCulture;
@@ -90,18 +88,19 @@ function filmOmdb() {
       }
     }
   }
+  var omdbURL = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
+
   request(omdbURL, function(error, response, body) {
     if(!error && response.statusCode == 200) {
+      var body = JSON.parse(body);
 
-
-      console.log("Title: " + JSON.parse(body).Title);
-      console.log("Release Year: " + JSON.parse(body).Year);
-      console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
-      console.log("Country: " + JSON.parse(body).Country);
-      console.log("Language: " + JSON.parse(body).Language);
-      console.log("Plot: " + JSON.parse(body).Plot);
-      console.log("Actors: " + JSON.parse(body).Actors);
-      console.log("Rotten Tomatoes Rating: " + JSON.parse(body).tomatoRating);
+      console.log("Title: " + body.Title);
+      console.log("Release Year: " + body.imdbRating);
+      console.log("Country: " + body.Country);
+      console.log("Language: " + body.Language);
+      console.log("Plot: " + body.Plot);
+      console.log("Actors: " + body.Actors);
+      console.log("Rotten Tomatoes Rating: " + body.Ratings[1].Value);
 
 
     } else {
